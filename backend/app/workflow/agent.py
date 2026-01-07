@@ -34,7 +34,7 @@ class CreditWorkflowAgent:
         Returns: WorkflowSummary with all events and final decision
         """
         print(f"\n{'='*60}")
-        print(f"🚀 STARTING CREDIT WORKFLOW FOR REQUEST: {request_id}")
+        print(f"STARTING CREDIT WORKFLOW FOR REQUEST: {request_id}")
         print(f"{'='*60}\n")
 
         # STEP 1: Credit Block Trigger
@@ -46,8 +46,8 @@ class CreditWorkflowAgent:
 
         # STEP 3: Human Approval (BLOCKING - must wait for human decision)
         # In async system, workflow pauses here until approval received
-        print("\n⏸️  WORKFLOW PAUSED - Waiting for human approval...")
-        print("💡 In production, this would wait for real human input via API\n")
+        print("\nWORKFLOW PAUSED - Waiting for human approval...")
+        print("In production, this would wait for real human input via API\n")
 
         # For demo, simulate waiting or use pre-set decision
         approver_decision = self._step3_wait_for_approval(request_id, ai_recommendation)
@@ -73,14 +73,14 @@ class CreditWorkflowAgent:
         )
 
         print(f"\n{'='*60}")
-        print(f"✅ WORKFLOW COMPLETED FOR REQUEST: {request_id}")
+        print(f"WORKFLOW COMPLETED FOR REQUEST: {request_id}")
         print(f"{'='*60}\n")
 
         return summary
 
     def _step1_credit_block_trigger(self, request_id: str) -> CreditRequest:
         """STEP 1: Retrieve and validate credit request"""
-        print("📋 STEP 1: Credit Block Trigger")
+        print("STEP 1: Credit Block Trigger")
         print("-" * 40)
 
         credit_request = self.tools.get_credit_request(request_id)
@@ -98,10 +98,10 @@ class CreditWorkflowAgent:
             }
         )
 
-        print(f"✓ Request ID: {credit_request.request_id}")
-        print(f"✓ Customer: {credit_request.customer_id}")
-        print(f"✓ Type: {credit_request.request_type.value}")
-        print(f"✓ Requestor: {credit_request.requestor.name}")
+        print(f"Request ID: {credit_request.request_id}")
+        print(f"Customer: {credit_request.customer_id}")
+        print(f"Type: {credit_request.request_type.value}")
+        print(f"Requestor: {credit_request.requestor.name}")
         print()
 
         return credit_request
@@ -112,7 +112,7 @@ class CreditWorkflowAgent:
         customer_snapshot: CustomerSnapshot
     ) -> AIRecommendation:
         """STEP 2: AI Analysis & Recommendation"""
-        print("🤖 STEP 2: AI Analysis & Recommendation")
+        print("STEP 2: AI Analysis & Recommendation")
         print("-" * 40)
 
         # Perform credit analysis
@@ -133,9 +133,9 @@ class CreditWorkflowAgent:
             }
         )
 
-        print(f"✓ Recommendation: {analysis.recommendation.value}")
-        print(f"✓ Confidence: {analysis.confidence:.1%}")
-        print(f"✓ Rationale: {analysis.rationale}")
+        print(f"Recommendation: {analysis.recommendation.value}")
+        print(f"Confidence: {analysis.confidence:.1%}")
+        print(f"Rationale: {analysis.rationale}")
         print()
 
         return analysis
@@ -300,7 +300,7 @@ class CreditWorkflowAgent:
         ai_recommendation: AIRecommendation
     ) -> ApproverDecision:
         """STEP 3: Wait for human approval (BLOCKING)"""
-        print("👤 STEP 3: Human Approval")
+        print("STEP 3: Human Approval")
         print("-" * 40)
 
         # In real system, this would block until API receives approval
@@ -310,7 +310,7 @@ class CreditWorkflowAgent:
 
         if not decision:
             # Demo fallback: Auto-approve AI recommendation
-            print("⚠️  No human decision received - using demo auto-approval")
+            print("No human decision received - using demo auto-approval")
             decision = ApproverDecision(
                 decision=DecisionType.APPROVE,
                 approved_limit=ai_recommendation.recommended_limit,
@@ -330,8 +330,8 @@ class CreditWorkflowAgent:
             }
         )
 
-        print(f"✓ Decision: {decision.decision.value}")
-        print(f"✓ Comments: {decision.comments}")
+        print(f"Decision: {decision.decision.value}")
+        print(f"Comments: {decision.comments}")
         print()
 
         return decision
@@ -343,11 +343,11 @@ class CreditWorkflowAgent:
         decision: ApproverDecision
     ) -> Optional[Dict[str, Any]]:
         """STEP 4: Update SAP S/4HANA"""
-        print("🔧 STEP 4: SAP Update")
+        print("STEP 4: SAP Update")
         print("-" * 40)
 
         if decision.decision == DecisionType.REJECT:
-            print("⊘ Skipped - Request rejected")
+            print("Skipped - Request rejected")
             self.tools.emit_workflow_event(
                 step="SAP Update",
                 status=WorkflowStatus.COMPLETED,
@@ -390,8 +390,8 @@ class CreditWorkflowAgent:
                 }
             )
 
-            print(f"✓ Action: {sap_response.action_taken}")
-            print(f"✓ SAP Ref: {sap_response.sap_reference_id}")
+            print(f"Action: {sap_response.action_taken}")
+            print(f"SAP Ref: {sap_response.sap_reference_id}")
             print()
 
         return sap_response.model_dump() if sap_response else None
@@ -403,7 +403,7 @@ class CreditWorkflowAgent:
         sap_result: Optional[Dict[str, Any]]
     ):
         """STEP 5: Send notification to requestor"""
-        print("📧 STEP 5: Notification")
+        print("STEP 5: Notification")
         print("-" * 40)
 
         # Build email content
@@ -459,8 +459,8 @@ Credit Control System"""
             }
         )
 
-        print(f"✓ Sent to: {request.requestor.email}")
-        print(f"✓ Subject: {subject}")
+        print(f"Sent to: {request.requestor.email}")
+        print(f"Subject: {subject}")
         print()
 
     def _generate_workflow_summary(

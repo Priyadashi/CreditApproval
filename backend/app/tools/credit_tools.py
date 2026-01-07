@@ -166,9 +166,9 @@ class CreditWorkflowTools:
         )
 
         # For demo, just log
-        print(f"📧 EMAIL SENT TO: {email}")
-        print(f"📋 SUBJECT: {subject}")
-        print(f"📝 BODY:\n{body}")
+        print(f"EMAIL SENT TO: {email}")
+        print(f"SUBJECT: {subject}")
+        print(f"BODY:\n{body}")
 
         return {
             "success": True,
