@@ -31,6 +31,7 @@ app.add_middleware(
         "http://127.0.0.1:3000",
         "http://frontend:3000"
     ],
+    allow_origin_regex=r"^https://.*\.app\.github\.dev$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

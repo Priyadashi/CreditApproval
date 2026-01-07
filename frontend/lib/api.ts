@@ -4,7 +4,23 @@
 
 import axios from 'axios';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:8000';
+const getApiBase = () => {
+  if (process.env.NEXT_PUBLIC_API_BASE) {
+    return process.env.NEXT_PUBLIC_API_BASE;
+  }
+
+  // Auto-detect Codespaces environment
+  if (typeof window !== 'undefined' && window.location.hostname.endsWith('.app.github.dev')) {
+    // Codespaces usually forwards ports to <host>-<port>.app.github.dev
+    // Frontend is on 3000, Backend is on 8000. Replace -3000 with -8000 in hostname
+    const newHost = window.location.hostname.replace('-3000', '-8000');
+    return `${window.location.protocol}//${newHost}`;
+  }
+
+  return 'http://localhost:8000';
+};
+
+const API_BASE = getApiBase();
 
 const apiClient = axios.create({
   baseURL: API_BASE,
